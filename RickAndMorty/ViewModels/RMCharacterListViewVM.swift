@@ -14,8 +14,8 @@ final class RMCharacterListViewVM:NSObject {
         RMService.shared.execute(.listCharactersRequest,expecting: RMGetCharacterResponse.self) { result in
             switch result {
             case .success(let model):
-                print("Total: "+String(model.info.pages))
-                print("Page result count: "+String(model.results.count))
+                print("Example image url: "+String(model.results.first?.image ?? "No Image"))
+                
             case .failure(let error):
                 print(String(describing: error))
             }
@@ -30,13 +30,21 @@ extension RMCharacterListViewVM: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier,
-                                                      for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier,
+            for: indexPath) as? RMCharacterCollectionViewCell else {
+            fatalError("Unsupported Cell")
+        }
+        let viewModel = RMCharacterCollectionViewCellVM(
+            characterName: "Afraz",
+            characterStatus: .alive,
+            characterImageUrl: URL(string: "https://rickandmortyapi.com/api/character/avatar/1.jpeg"))
+        cell.configure(with: viewModel)
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width - 30) / 2
-        return CGSize(width: width, height: width * 1.5)
+        
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            let width = (collectionView.bounds.width - 30) / 2
+            return CGSize(width: width, height: width * 1.5)
+        }
     }
-}
