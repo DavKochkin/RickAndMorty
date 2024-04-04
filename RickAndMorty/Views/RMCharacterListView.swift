@@ -22,12 +22,12 @@ final class RMCharacterListView: UIView {
     
     
     private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.sectionInset    = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let layout              = UICollectionViewFlowLayout()
+        layout.scrollDirection  = .vertical
+        layout.sectionInset     = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        let collectionView      = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isHidden = true
-        collectionView.alpha = 0
+        collectionView.alpha    = 0
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(RMCharacterCollectionViewCell.self,
                                 forCellWithReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier)
