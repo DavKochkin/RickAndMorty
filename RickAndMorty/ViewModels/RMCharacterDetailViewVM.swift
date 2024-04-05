@@ -9,8 +9,13 @@ import UIKit
 
 
 final class RMCharacterDetailViewVM {
+    private let character: RMCharacter
     
     init(character: RMCharacter) {
-        
+        self.character = character
+    }
+    
+    public var title: String {
+        character.name.uppercased()
     }
 }
