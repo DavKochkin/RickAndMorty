@@ -26,7 +26,7 @@ final class RMCharacterCollectionViewCellVM {
     
     
     public var characterStatusText: String {
-        return characterStatus.rawValue
+        return "Status: \(characterStatus.text)"
     }
     
     
