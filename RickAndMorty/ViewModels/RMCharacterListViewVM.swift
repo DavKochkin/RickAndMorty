@@ -73,6 +73,7 @@ extension RMCharacterListViewVM: UICollectionViewDataSource, UICollectionViewDel
         return cellViewModels.count
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier,
@@ -82,11 +83,38 @@ extension RMCharacterListViewVM: UICollectionViewDataSource, UICollectionViewDel
         cell.configure(with: cellViewModels[indexPath.row])
         return cell
     }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionFooter else {
+            fatalError("Unsupported")
+        }
         
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let footer = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: RMFooterLoadingCollectionReusableView.identifier,
+            for: indexPath
+        )
+        
+        return footer
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard shouldShowLoadMoreIndicator else {
+            return .zero
+        }
+        
+        return CGSize(width: collectionView.frame.width,
+                      height: 100)
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             let width = (collectionView.bounds.width - 30) / 2
             return CGSize(width: width, height: width * 1.5)
         }
+    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
