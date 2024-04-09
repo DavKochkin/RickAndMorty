@@ -9,6 +9,7 @@ import UIKit
 
 protocol RMCharacterListViewVMDelegate: AnyObject {
     func didLoadInitialCharactes()
+    func didLoadMoreCharacters(with newIndexPaths: [IndexPath])
     func didSelectCharacter(_ character: RMCharacter)
 }
 
@@ -27,7 +28,9 @@ final class RMCharacterListViewVM: NSObject {
                     characterStatus: character.status,
                     characterImageUrl: URL(string: character.image)
                 )
-                cellViewModels.append(viewModel)
+                if !cellViewModels.contains(viewModel) {
+                    cellViewModels.append(viewModel)
+                }
             }
         }
     }
@@ -68,17 +71,31 @@ final class RMCharacterListViewVM: NSObject {
             isLoadingMoreCharacters = false
             return
         }
-        RMService.shared.execute(request,
-                                 expecting: RMGetCharacterResponse.self) { [weak self] result in
+        RMService.shared.execute(request, expecting: RMGetCharacterResponse.self) { [weak self] result in
+            guard let strongSelf = self else {
+                return
+            }
             switch result {
             case .success(let responseModel):
-                let moreResults  = responseModel.results
-                let info         = responseModel.info
-                self?.apiInfo    = info
-                self?.characters.append(contentsOf: moreResults)
+                let moreResults = responseModel.results
+                let info = responseModel.info
+                strongSelf.apiInfo = info
+                
+                let originalCount = strongSelf.characters.count
+                let newCount = moreResults.count
+                let total = originalCount+newCount
+                let startingIndex = total - newCount
+                let indexPathsToAdd: [IndexPath] = Array(startingIndex..<(startingIndex+newCount)).compactMap({
+                    return IndexPath(row: $0, section: 0)
+                })
+                strongSelf.characters.append(contentsOf: moreResults)
+                
                 DispatchQueue.main.async {
-                    self?.delegate?.didLoadInitialCharactes()
-                    self?.isLoadingMoreCharacters = false
+                    strongSelf.delegate?.didLoadMoreCharacters(
+                        with: indexPathsToAdd
+                    )
+                    
+                    strongSelf.isLoadingMoreCharacters = false
                 }
             case .failure(let failure):
                 print(String(describing: failure))
@@ -136,9 +153,9 @@ extension RMCharacterListViewVM: UICollectionViewDataSource, UICollectionViewDel
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let width = (collectionView.bounds.width - 30) / 2
-            return CGSize(width: width, height: width * 1.5)
-        }
+        let width = (collectionView.bounds.width - 30) / 2
+        return CGSize(width: width, height: width * 1.5)
+    }
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
