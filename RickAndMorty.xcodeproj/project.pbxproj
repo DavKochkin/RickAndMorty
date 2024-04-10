@@ -36,6 +36,7 @@
 		048B5CA92BBE983F007B9CB8 /* RMCharacterListViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B5CA82BBE983F007B9CB8 /* RMCharacterListViewVM.swift */; };
 		048B5CAB2BBE98B7007B9CB8 /* RMCharacterListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B5CAA2BBE98B7007B9CB8 /* RMCharacterListView.swift */; };
 		048B5CAD2BBE9C05007B9CB8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B5CAC2BBE9C05007B9CB8 /* Extensions.swift */; };
+		04ADD1FB2BC6BBF200D99924 /* RMImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04ADD1FA2BC6BBF200D99924 /* RMImageLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		048B5CA82BBE983F007B9CB8 /* RMCharacterListViewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMCharacterListViewVM.swift; sourceTree = "<group>"; };
 		048B5CAA2BBE98B7007B9CB8 /* RMCharacterListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMCharacterListView.swift; sourceTree = "<group>"; };
 		048B5CAC2BBE9C05007B9CB8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		04ADD1FA2BC6BBF200D99924 /* RMImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMImageLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +168,7 @@
 		041076CC2BB7229500B55E59 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				04ADD1FA2BC6BBF200D99924 /* RMImageLoader.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 				0452BF092BBF233B0004B805 /* RMCharacterCollectionViewCell.swift in Sources */,
 				041076DA2BB7F46500B55E59 /* RMEpisodeViewController.swift in Sources */,
 				041076B42BB7218F00B55E59 /* AppDelegate.swift in Sources */,
+				04ADD1FB2BC6BBF200D99924 /* RMImageLoader.swift in Sources */,
 				041076B62BB7218F00B55E59 /* SceneDelegate.swift in Sources */,
 				041076DC2BB7F46F00B55E59 /* RMSettingsViewController.swift in Sources */,
 				048B5CAD2BBE9C05007B9CB8 /* Extensions.swift in Sources */,
