@@ -22,11 +22,4 @@ final class RMCharacterDetailViewVM {
     public var title: String {
         character.name.uppercased()
     }
-    
-    public func fetchCharacterData() {
-        guard let url     = requestUrl,
-              let request = RMRequest(url: url) else {
-            return
-        }
-    }
 }
