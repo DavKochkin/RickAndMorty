@@ -10,7 +10,7 @@ import UIKit
 /// View for Single Character Info
 final class RMCharacterDetailView: UIView {
     
-    private var collectionView: UICollectionView?
+    public var collectionView: UICollectionView?
     
     private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
@@ -24,7 +24,7 @@ final class RMCharacterDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor     = .systemPurple
+        backgroundColor     = .systemBackground
         let collectionView  = createCollectionView()
         self.collectionView = collectionView
         addSubviews(collectionView, spinner)
@@ -60,11 +60,31 @@ final class RMCharacterDetailView: UIView {
         }
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false 
         return collectionView
     }
     
     
     private func createSection(for sectionIndex: Int) -> NSCollectionLayoutSection {
-        return 
+        let item  = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)
+            )
+        )
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                     leading: 0,
+                                                     bottom: 10,
+                                                     trailing: 0
+        )
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(150)
+            ),
+            subitems: [item]
+        )
+        let section = NSCollectionLayoutSection(group: group)
+        return section
     }
 }
