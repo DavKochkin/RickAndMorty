@@ -13,12 +13,32 @@ final class RMCharacterInfoCollectionViewCellVM {
     private let type: `Type`
     private let value: String
     
+    static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
+        formatter.timeZone   = .current
+        return formatter
+    }()
+    
+    static let shortDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter
+    }()
+    
     public var title: String {
         type.displayTitle
     }
     
     public var displayValue: String {
         if value.isEmpty { return "None" }
+        
+        if let date = Self.dateFormatter.date(from: value),
+           type == .created {
+            return Self.shortDateFormatter.string(from: date)
+        }
+        
         return value
     }
     
@@ -30,7 +50,7 @@ final class RMCharacterInfoCollectionViewCellVM {
         return type.tintColor
     }
     
-    enum `Type` {
+    enum `Type`: String {
         case status
         case gender
         case type
@@ -83,24 +103,18 @@ final class RMCharacterInfoCollectionViewCellVM {
         }
         
         var displayTitle: String {
-            
             switch self {
-            case .status:
-                return "Something"
-            case .gender:
-                return "Something"
-            case .type:
-                return "Something"
-            case .species:
-                return "Something"
-            case .origin:
-                return "Something"
-            case .created:
-                return "Something"
-            case .location:
-                return "Something"
+            case .status,
+                    .gender,
+                    .type,
+                    .species,
+                    .origin,
+                    .created,
+                    .location:
+                return rawValue.uppercased()
+                
             case .episodeCount:
-                return "Something"
+                return "EPISODE COUNT"
             }
         }
     }
