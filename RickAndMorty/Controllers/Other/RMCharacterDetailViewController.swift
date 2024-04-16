@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 /// Controller to show info about single character
 final class RMCharacterDetailViewController: UIViewController {
     private let viewModel: RMCharacterDetailViewVM
@@ -121,9 +120,11 @@ extension RMCharacterDetailViewController: UICollectionViewDelegate, UICollectio
         switch sectionType {
         case .photo, .information:
             break
-        case .episodes(viewModels: let viewModels):
-            let viewModel = viewModels[indexPath.row]
-            
+        case .episodes:
+            let episodes  = self.viewModel.episodes
+            let selection = episodes[indexPath.row]
+            let vc        = RMEpisodeDetailViewController(url: URL(string: selection))
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
