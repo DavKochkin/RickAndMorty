@@ -17,6 +17,17 @@ final class RMEpisodeViewController: UIViewController, RMEpisodeListViewDelegate
         view.backgroundColor = .systemBackground
         title = "Episodes"
         setupView()
+        addSearchButton()
+    }
+    
+    private func addSearchButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
+                                                            target: self,
+                                                            action: #selector(didTapSearch))
+    }
+    
+    @objc private func didTapSearch() {
+        
     }
     
     
