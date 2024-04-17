@@ -20,11 +20,24 @@ final class RMepisodeListViewVM: NSObject {
     
     private var isLoadingMoreEpisodes = false
     
+    private let borderColors: [UIColor] = [
+        .systemGreen,
+        .systemRed,
+        .systemBlue,
+        .systemOrange,
+        .systemPink,
+        .systemPurple,
+        .systemGreen,
+        .systemMint,
+        .systemYellow
+    ]
+    
     private var episodes: [RMEpisode] = [] {
         didSet {
             for episode in episodes {
                 let viewModel = RMCharacterEpisodeCollectionViewCellVM(
-                    episodeDataUrl: URL(string: episode.url)
+                    episodeDataUrl: URL(string: episode.url),
+                    borderColor: borderColors.randomElement() ?? .systemBlue
                 )
                 if !cellViewModels.contains(viewModel) {
                     cellViewModels.append(viewModel)
@@ -151,8 +164,9 @@ extension RMepisodeListViewVM: UICollectionViewDataSource, UICollectionViewDeleg
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width - 30) / 2
-        return CGSize(width: width, height: width * 0.8)
+        let bounds = collectionView.bounds
+        let width  = bounds.width-20
+        return CGSize(width: width, height: 100)
     }
     
     
