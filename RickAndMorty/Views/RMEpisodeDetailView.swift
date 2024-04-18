@@ -11,6 +11,13 @@ final class RMEpisodeDetailView: UIView {
     
     private var viewModel: RMEpisodeDetailViewVM?
     
+    private var collectionVIew: UICollectionView?
+    
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.translatesAutoresizingMaskIntoConstraints = false 
+        return spinner
+    }()
  
     //MARK: - Init
     
@@ -18,6 +25,8 @@ final class RMEpisodeDetailView: UIView {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false 
         backgroundColor = .systemRed
+        self.collectionVIew = createCollectionView()
+        addConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -25,8 +34,16 @@ final class RMEpisodeDetailView: UIView {
     }
     
     private func addConstraints() {
+        NSLayoutConstraint.activate([
+        
+        ])
+    }
+    
+    private func createCollectionView() -> UICollectionView {
         
     }
+    
+    //MARK: - Public
     
     public func configure(with viewModel: RMEpisodeDetailViewVM) {
         self.viewModel = viewModel
