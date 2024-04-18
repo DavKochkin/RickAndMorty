@@ -8,7 +8,7 @@
 import UIKit
 
 /// VC to show details about single episode!
-final class RMEpisodeDetailViewController: UIViewController {
+final class RMEpisodeDetailViewController: UIViewController, RMEpisodeDetailViewVMDelegate {
     private let viewModel: RMEpisodeDetailViewVM
     
     private let detailView = RMEpisodeDetailView()
@@ -16,7 +16,7 @@ final class RMEpisodeDetailViewController: UIViewController {
     //MARK: - Init
 
     init(url: URL?) {
-        self.viewModel = .init(endpointUrl: url)
+        self.viewModel = RMEpisodeDetailViewVM(endpointUrl: url)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -31,15 +31,12 @@ final class RMEpisodeDetailViewController: UIViewController {
         view.addSubview(detailView)
         addConstraints()
         title = "Episode"
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action,
                                                             target: self,
                                                             action: #selector(didTapShare))
-    }
-    
-    
-    @objc private func didTapShare() {
         
+        viewModel.delegate = self
+        viewModel.fetchEpisodeData()
     }
     
     
@@ -51,4 +48,16 @@ final class RMEpisodeDetailViewController: UIViewController {
             detailView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
+    
+    @objc private func didTapShare() {
+        
+    }
+    
+    //MARK: - Delegate
+    
+    func didFetchEpisodeDetails() {
+        detailView.configure(with: viewModel)
+    }
+    
+    
 }

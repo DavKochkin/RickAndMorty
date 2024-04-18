@@ -8,7 +8,12 @@
 import UIKit
 
 final class RMEpisodeDetailView: UIView {
+    
+    private var viewModel: RMEpisodeDetailViewVM?
+    
  
+    //MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false 
@@ -17,5 +22,13 @@ final class RMEpisodeDetailView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("Unsupported")
+    }
+    
+    private func addConstraints() {
+        
+    }
+    
+    public func configure(with viewModel: RMEpisodeDetailViewVM) {
+        self.viewModel = viewModel
     }
 }
