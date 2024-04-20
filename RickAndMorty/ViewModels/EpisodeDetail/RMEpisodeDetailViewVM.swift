@@ -13,15 +13,16 @@ protocol RMEpisodeDetailViewVMDelegate: AnyObject {
 
 final class RMEpisodeDetailViewVM {
     private let endpointUrl: URL?
-    private var dataTuple: (RMEpisode, [RMCharacter])? {
+    private var dataTuple: (episode: RMEpisode, characters: [RMCharacter])? {
         didSet {
+            createCellViewModels()
             delegate?.didFetchEpisodeDetails()
         }
     }
     
     enum SectionType {
         case information(viewModel: [RMEpisodeInfoCollectionViewCellVM])
-        case characters(viewModel: [RMCharacterCollectionViewCellVM])
+        case characters(viewModel:  [RMCharacterCollectionViewCellVM])
     }
     
     public weak var delegate: RMEpisodeDetailViewVMDelegate?
@@ -34,11 +35,32 @@ final class RMEpisodeDetailViewVM {
     init(endpointUrl: URL?) {
         self.endpointUrl = endpointUrl
     }
-    
-    //MARK: - Public 
-    
-    
+
     //MARK: - Private
+    
+    private func createCellViewModels() {
+        guard let dataTuple = dataTuple else { return }
+        
+        let episode    = dataTuple.episode
+        let characters = dataTuple.characters
+        sections = [
+            .information(viewModel: [
+                .init(title: "Episode Name", value: episode.name),
+                .init(title: "Air Date",     value: episode.air_date),
+                .init(title: "Episode",      value: episode.episode),
+                .init(title: "Created",      value: episode.created),
+            ]),
+            .characters(
+                viewModel: characters.compactMap({ character in
+                    return RMCharacterCollectionViewCellVM(
+                        characterName: character.name,
+                        characterStatus: character.status,
+                        characterImageUrl: URL(string: character.image)
+                    )
+                })
+            )
+        ]
+    }
     
     /// Fetch backing episode model
     public func fetchEpisodeData() {
@@ -86,8 +108,8 @@ final class RMEpisodeDetailViewVM {
         }
         group.notify(queue: .main) {
             self.dataTuple = (
-            episode,
-            characters
+                episode: episode,
+                characters: characters
             )
         }
     }
