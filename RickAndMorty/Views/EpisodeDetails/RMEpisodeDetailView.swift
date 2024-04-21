@@ -175,7 +175,7 @@ extension RMEpisodeDetailView {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(80)
+                heightDimension: .absolute(100)
             ),
             subitems: [item]
         )
