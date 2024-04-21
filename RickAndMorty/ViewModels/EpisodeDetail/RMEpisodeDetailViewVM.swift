@@ -27,7 +27,7 @@ final class RMEpisodeDetailViewVM {
     
     public weak var delegate: RMEpisodeDetailViewVMDelegate?
     
-    public private(set) var sections: [SectionType] = []
+    public private(set) var cellViewModels: [SectionType] = []
 
     
     //MARK: - Init
@@ -43,7 +43,7 @@ final class RMEpisodeDetailViewVM {
         
         let episode    = dataTuple.episode
         let characters = dataTuple.characters
-        sections = [
+        cellViewModels = [
             .information(viewModel: [
                 .init(title: "Episode Name", value: episode.name),
                 .init(title: "Air Date",     value: episode.air_date),

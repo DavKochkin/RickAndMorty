@@ -58,6 +58,4 @@ final class RMEpisodeDetailViewController: UIViewController, RMEpisodeDetailView
     func didFetchEpisodeDetails() {
         detailView.configure(with: viewModel)
     }
-    
-    
 }
