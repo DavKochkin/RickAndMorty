@@ -78,7 +78,7 @@ final class RMEpisodeDetailView: UIView {
         collectionView.delegate   = self
         collectionView.dataSource = self
         collectionView.register(RMEpisodeInfoCollectionViewCell.self,
-                                forCellWithReuseIdentifier: RMEpisodeInfoCollectionViewCell.identifier)
+                                forCellWithReuseIdentifier: RMEpisodeInfoCollectionViewCell.cellIdentifier)
         collectionView.register(RMCharacterCollectionViewCell.self,
                                 forCellWithReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier)
         return collectionView
@@ -121,7 +121,7 @@ extension RMEpisodeDetailView: UICollectionViewDelegate, UICollectionViewDataSou
         case .information(let viewModels):
             let cellViewModel = viewModels[indexPath.row]
             guard let cell    = collectionView.dequeueReusableCell(
-                withReuseIdentifier: RMEpisodeInfoCollectionViewCell.identifier,
+                withReuseIdentifier: RMEpisodeInfoCollectionViewCell.cellIdentifier,
                 for: indexPath
             ) as? RMEpisodeInfoCollectionViewCell else {
                 fatalError()
@@ -175,7 +175,7 @@ extension RMEpisodeDetailView {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(100)
+                heightDimension: .absolute(80)
             ),
             subitems: [item]
         )
