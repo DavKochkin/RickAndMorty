@@ -8,7 +8,8 @@
 import UIKit
 
 /// VC to show details about single episode!
-final class RMEpisodeDetailViewController: UIViewController, RMEpisodeDetailViewVMDelegate {
+final class RMEpisodeDetailViewController: UIViewController, RMEpisodeDetailViewVMDelegate, RMEpisodeDetailViewDelegate {
+    
     private let viewModel: RMEpisodeDetailViewVM
     
     private let detailView = RMEpisodeDetailView()
@@ -30,6 +31,7 @@ final class RMEpisodeDetailViewController: UIViewController, RMEpisodeDetailView
         super.viewDidLoad()
         view.addSubview(detailView)
         addConstraints()
+        detailView.delegate = self
         title = "Episode"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action,
                                                             target: self,
@@ -53,7 +55,16 @@ final class RMEpisodeDetailViewController: UIViewController, RMEpisodeDetailView
         
     }
     
-    //MARK: - Delegate
+    //MARK: - View Delegat
+    
+    func rmEpisodeDetailView(_ detailView: RMEpisodeDetailView, didSelect character: RMCharacter) {
+        let vc = RMCharacterDetailViewController(viewModel: .init(character: character))
+        vc.title = character.name
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    //MARK: - ViewModel Delegate
     
     func didFetchEpisodeDetails() {
         detailView.configure(with: viewModel)

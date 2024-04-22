@@ -35,6 +35,14 @@ final class RMEpisodeDetailViewVM {
     init(endpointUrl: URL?) {
         self.endpointUrl = endpointUrl
     }
+    
+    
+    public func character(at index: Int) -> RMCharacter? {
+        guard let dataTuple = dataTuple else {
+            return nil
+        }
+        return dataTuple.characters[index]
+    }
 
     //MARK: - Private
     
