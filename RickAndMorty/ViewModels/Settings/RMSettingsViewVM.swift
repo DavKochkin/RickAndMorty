@@ -11,7 +11,4 @@ import UIKit
 struct RMSettingsViewVM {
     let cellViewModels: [RMSettingsCellVM]
  
-    init() {
-        
-    }
 }
