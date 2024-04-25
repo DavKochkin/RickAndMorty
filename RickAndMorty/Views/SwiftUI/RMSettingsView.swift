@@ -16,8 +16,23 @@ struct RMSettingsView: View {
     
     var body: some View {
         List(viewModel.cellViewModels) { viewModel in
-            Text(viewModel.title)
-            
+            HStack {
+                if let image = viewModel.image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundStyle(Color.white)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .foregroundStyle(Color.red)
+                        .padding(8)
+                        .background(Color(viewModel.iconContainerColor))
+                        .presentationCornerRadius(6)
+                }
+                Text(viewModel.title)
+                    .padding(.leading, 10)
+            }
+            .padding(.bottom, 3)
         }
     }
 }
