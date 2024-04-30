@@ -58,6 +58,7 @@
 		04B035692BD7A2090037437C /* RMSettingsOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B035682BD7A2090037437C /* RMSettingsOption.swift */; };
 		04B0356C2BD7AADA0037437C /* RMSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B0356B2BD7AADA0037437C /* RMSettingsView.swift */; };
 		04CE69E12BE1443A00CB4742 /* RMLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CE69E02BE1443A00CB4742 /* RMLocationView.swift */; };
+		04CE69E32BE1470600CB4742 /* RMLocationViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CE69E22BE1470600CB4742 /* RMLocationViewVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +115,7 @@
 		04B035682BD7A2090037437C /* RMSettingsOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSettingsOption.swift; sourceTree = "<group>"; };
 		04B0356B2BD7AADA0037437C /* RMSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSettingsView.swift; sourceTree = "<group>"; };
 		04CE69E02BE1443A00CB4742 /* RMLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMLocationView.swift; sourceTree = "<group>"; };
+		04CE69E22BE1470600CB4742 /* RMLocationViewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMLocationViewVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +201,7 @@
 				048B5CA82BBE983F007B9CB8 /* RMCharacterListViewVM.swift */,
 				0452BF0A2BBF245B0004B805 /* RMCharacterCollectionViewCellVM.swift */,
 				04A484E42BCFC0B000E51F31 /* RMEpisodeListViewVM.swift */,
+				04CE69E22BE1470600CB4742 /* RMLocationViewVM.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -461,6 +464,7 @@
 				04B0356C2BD7AADA0037437C /* RMSettingsView.swift in Sources */,
 				041076DC2BB7F46F00B55E59 /* RMSettingsViewController.swift in Sources */,
 				04B035652BD7A1510037437C /* RMSettingsViewVM.swift in Sources */,
+				04CE69E32BE1470600CB4742 /* RMLocationViewVM.swift in Sources */,
 				04ADD1FF2BCBE3FA00D99924 /* RMCharacterPhotoCollectionViewCell.swift in Sources */,
 				048B5CAD2BBE9C05007B9CB8 /* Extensions.swift in Sources */,
 				048B5C972BB930E6007B9CB8 /* RMService.swift in Sources */,
