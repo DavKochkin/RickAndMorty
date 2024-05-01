@@ -45,10 +45,16 @@ final class RMLocationView: UIView {
         addSubviews(tableView, spinner)
         spinner.startAnimating()
         addConstraints()
+        configureTable()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureTable() {
+        tableView.delegate   = self
+        tableView.dataSource = self
     }
     
     private func addConstraints() {
@@ -67,5 +73,29 @@ final class RMLocationView: UIView {
     
     public func configure(with viewModel: RMLocationViewVM) {
         self.viewModel = viewModel
+    }
+}
+
+
+extension RMLocationView: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        // Notify controller of selection
+    }
+}
+
+extension RMLocationView: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 20
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = " Hello Rick and Morty"
+        return cell
     }
 }

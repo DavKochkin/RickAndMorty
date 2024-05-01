@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol RMLocationViewVMDelegate: AnyObject {
+    func didFetchInitialLocations()
+}
 
 final class RMLocationViewVM {
+    
+    weak var delegate: RMLocationViewVMDelegate?
     
     private var locations: [RMLocation] = []
     
@@ -21,10 +26,10 @@ final class RMLocationViewVM {
     
     public func fetchLocations() {
         RMService.shared.execute(.listLocationsRequest,
-                                 expecting: String.self) { result in
+                                 expecting: String.self) { [weak self] result in
             switch result {
             case .success(let model):
-                break
+                self?.delegate?.didFetchInitialLocations()
             case .failure(let error):
                 break 
             }
