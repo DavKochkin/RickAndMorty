@@ -18,8 +18,10 @@ final class RMLocationViewVM {
     private var locations: [RMLocation] = [] {
         didSet {
             for location in locations {
-                let cellViewModel = RMLocationTableViewCellVM()
-                cellViewModels.append(cellViewModel)
+                let cellViewModel = RMLocationTableViewCellVM(location: location)
+                if !cellViewModels.contains(cellViewModel) {
+                    cellViewModels.append(cellViewModel)
+                }
             }
         }
     }
