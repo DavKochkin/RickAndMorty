@@ -25,7 +25,10 @@ final class RMLocationView: UIView {
         table.translatesAutoresizingMaskIntoConstraints = false
         table.alpha    = 0
         table.isHidden = true
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(
+            RMLocationTableViewCell.self,
+            forCellReuseIdentifier: RMLocationTableViewCell.cellIdentifier
+        )
         return table
     }()
     
@@ -85,17 +88,17 @@ extension RMLocationView: UITableViewDelegate {
 }
 
 extension RMLocationView: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return viewModel?.cellViewModels.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = " Hello Rick and Morty"
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: RMLocationTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as? RMLocationTableViewCell else {
+            fatalError()
+        }
         return cell
     }
 }
