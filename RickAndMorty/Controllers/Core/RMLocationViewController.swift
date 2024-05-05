@@ -8,7 +8,7 @@
 import UIKit
 
 /// /// Controller to show and search for  locations
-final class RMLocationViewController: UIViewController, RMLocationViewVMDelegate {
+final class RMLocationViewController: UIViewController, RMLocationViewVMDelegate, RMLocationViewDelegate {
     
     private let primaryView = RMLocationView()
   
@@ -18,6 +18,7 @@ final class RMLocationViewController: UIViewController, RMLocationViewVMDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        primaryView.delegate = self
         view.addSubview(primaryView)
         view.backgroundColor = .systemBackground
         title = "Locations"
@@ -45,6 +46,14 @@ final class RMLocationViewController: UIViewController, RMLocationViewVMDelegate
     
     @objc private func didTapSearch() {
         
+    }
+    
+    //MARK: - RMLocationViewDelegate
+    
+    func rmLocationView(_ locationView: RMLocationView, didSelect location: RMLocation) {
+        let vc = RMLocationDetailViewController(location: location)
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     //MARK: - LocationViewModel Delegate
