@@ -7,7 +7,7 @@
 import UIKit
 
 protocol RMLocationDetailViewDelegate: AnyObject {
-    func RMLocationDetailView(
+    func rmLocationDetailView(
         _ detailView: RMLocationDetailView,
         didSelect character: RMCharacter
     )
@@ -164,7 +164,7 @@ extension RMLocationDetailView: UICollectionViewDelegate, UICollectionViewDataSo
             guard let character = viewModel.character(at: indexPath.row) else {
                 return
             }
-            delegate?.RMLocationDetailView(self, didSelect: character)
+            delegate?.rmLocationDetailView(self, didSelect: character)
         }
     }
 }
