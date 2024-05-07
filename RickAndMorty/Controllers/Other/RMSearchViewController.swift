@@ -10,17 +10,31 @@ import UIKit
 /// Configurable controller to search
 class RMSearchViewController: UIViewController {
     
+    /// Configuration for search session
     struct Config {
         enum `Type` {
             case character
             case episode
             case location
+            
+            var title: String {
+                switch self {
+                case .character:
+                    return "Search Characters"
+                case .location:
+                    return "Search Locations"
+                case .episode:
+                    return "Search Episodes"
+                }
+            }
         }
         
         let type: `Type`
     }
     
     private let config: Config
+    
+    //MARK:  - Init
     
     init(config: Config) {
         self.config = config
@@ -31,9 +45,11 @@ class RMSearchViewController: UIViewController {
         fatalError("Unsupported")
     }
     
+    //MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Search"
+        title = config.type.title
         view.backgroundColor = .systemBackground
     }
 }
