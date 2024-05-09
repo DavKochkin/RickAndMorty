@@ -62,6 +62,11 @@ class RMSearchViewController: UIViewController {
                                                             action: #selector(didTapExecuteSearch))
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchView.presentKeyboard()
+    }
+    
     
     @objc
     private func didTapExecuteSearch() {
