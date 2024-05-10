@@ -39,6 +39,8 @@ final class RMSearchInputView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Private
+    
     private func addConstraints() {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: topAnchor),
@@ -48,12 +50,13 @@ final class RMSearchInputView: UIView {
         ])
     }
     
-    private func createOptionStackView() -> UIStackView{
+    private func createOptionStackView() -> UIStackView {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis         = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment    = .center
+        stackView.spacing      = 6
         addSubview(stackView)
         
         NSLayoutConstraint.activate([
@@ -68,21 +71,39 @@ final class RMSearchInputView: UIView {
     private func createOptionSelectionView(options: [RMSearchInputViewVM.DynamicOption]) {
         let stackView = createOptionStackView()
         
-        for option in options {
+        for x in 0..<options.count {
+            let option = options[x]
             let button = UIButton()
-            button.setTitle(option.rawValue, for: .normal)
-            button.backgroundColor = .yellow
+            button.setAttributedTitle(
+                NSAttributedString(
+                    string: option.rawValue,
+                    attributes: [
+                        .font: UIFont.systemFont(ofSize: 18, weight: .medium),
+                        .foregroundColor: UIColor.label
+                    ]),
+                for: .normal
+            )
+            button.backgroundColor = .secondarySystemBackground
             button.setTitleColor(.label, for: .normal)
-            button.addTarget(self, action: #selector(didTapbutton), for: .touchUpInside)
-            
+            button.addTarget(self, action: #selector(didTapbutton(_:)), for: .touchUpInside)
+            button.tag = x
             stackView.addArrangedSubview(button)
         }
     }
     
     @objc
     private func didTapbutton(_ sender: UIButton) {
+        guard let options = viewModel?.options else {
+            return
+        }
+        let tag = sender.tag
+        let selected = options[tag]
         
+        print("Did tap \(selected.rawValue)")
     }
+    
+    
+    //MARK: - Public
     
     public func configure(with viewModel: RMSearchInputViewVM) {
         searchBar.placeholder = viewModel.searchPlaceholderText
