@@ -281,13 +281,21 @@
 		0452BF0C2BBFFCB70004B805 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				0466C0FE2BF3833E00F62162 /* Search */,
 				0452BF0D2BBFFCD90004B805 /* RMCharacterDetailViewController.swift */,
 				04A484D92BCE8EAB00E51F31 /* RMEpisodeDetailViewController.swift */,
-				04A484E82BCFFCFC00E51F31 /* RMSearchViewController.swift */,
 				048FF4972BE7ACD100BBD85B /* RMLocationDetailViewController.swift */,
-				042E8FD22BF226710089C519 /* RMSearchOptionPickerViewController.swift */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		0466C0FE2BF3833E00F62162 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				04A484E82BCFFCFC00E51F31 /* RMSearchViewController.swift */,
+				042E8FD22BF226710089C519 /* RMSearchOptionPickerViewController.swift */,
+			);
+			name = Search;
 			sourceTree = "<group>";
 		};
 		047F55E62BD26B6300151734 /* EpisodeDetails */ = {
