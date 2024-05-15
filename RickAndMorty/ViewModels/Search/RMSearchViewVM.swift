@@ -10,10 +10,10 @@ import Foundation
 
 final class RMSearchViewVM {
     let config: RMSearchViewController.Config
+    private var optionMap: [RMSearchInputViewVM.DynamicOption: String] = [:]
+    private var searchText = ""
     
     private var optionMapUpdateBlock: (((RMSearchInputViewVM.DynamicOption, String)) -> Void)?
-    
-    private var optionMap: [RMSearchInputViewVM.DynamicOption: String] = [:]
     
     //MARK: - Init
     
@@ -22,6 +22,14 @@ final class RMSearchViewVM {
     }
     
     //MARK: - Public
+    
+    public func executeSearch() {
+        
+    }
+    
+    public func set(query text: String) {
+        self.searchText = text
+    }
     
     public func set(value: String, for option: RMSearchInputViewVM.DynamicOption) {
         optionMap[option] = value

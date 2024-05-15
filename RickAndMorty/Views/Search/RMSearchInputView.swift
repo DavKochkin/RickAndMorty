@@ -102,8 +102,7 @@ final class RMSearchInputView: UIView {
             return
         }
         
-        let button: UIButton = buttons[index]
-        button.setAttributedTitle(
+        buttons[index].setAttributedTitle(
             NSAttributedString(
                 string: value.uppercased(),
                 attributes: [
