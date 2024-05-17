@@ -24,7 +24,39 @@ final class RMSearchViewVM {
     //MARK: - Public
     
     public func executeSearch() {
+        // Create Request based on Filters
+        // https://rickandmorty.com/api/character/?name=rick&status=alive
         
+        switch config.type {
+        case .character:
+            searchText = "Rick"
+            
+            var queryParams = [URLQueryItem(name: "name", value: searchText)]
+            queryParams.append(contentsOf: optionMap.enumerated().compactMap({ _, element in
+                let key: RMSearchInputViewVM.DynamicOption = element.key
+                let value: String = element.value
+                return URLQueryItem(name: key.queryArgument, value: value)
+            }))
+            
+            let request = RMRequest(
+                endpoint: .character,
+                queryParameters: queryParams
+            )
+            
+            RMService.shared.execute(request, expecting: RMGetCharacterResponse.self) { result in
+                switch result {
+                case .success(let model):
+                    print("Search results found: \(model.results.count)")
+                case .failure(let error):
+                    break
+                }
+            }
+            
+        case .episode:
+            <#code#>
+        case .location:
+            <#code#>
+        }
     }
     
     public func set(query text: String) {
