@@ -15,28 +15,26 @@ final class RMSearchViewVM {
     
     private var optionMapUpdateBlock: (((RMSearchInputViewVM.DynamicOption, String)) -> Void)?
     
-    private var searchResultHandler: (() -> Void?)
+//    private var searchResultHandler: (() -> Void?)
     
     //MARK: - Init
     
     init(config: RMSearchViewController.Config){
         self.config = config
-        self.searchResultHandler = nil 
     }
     
     //MARK: - Public
     
-    public func registerSearchResultHandler(_ block: @escaping () -> Void) {
-        self.searchResultHandler = block
-    }
+//    public func registerSearchResultHandler(_ block: @escaping () -> Void) {
+//        self.searchResultHandler = block
+//    }
     
     public func executeSearch() {
-        // Test Search text
-        searchText = "Rick"
+        print("Search text: \(searchText)")
         
         // Build arguments
         var queryParams: [URLQueryItem] = [
-            URLQueryItem(name: "name", value: searchText)
+            URLQueryItem(name: "name", value: searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
         ]
         
         // Add options
