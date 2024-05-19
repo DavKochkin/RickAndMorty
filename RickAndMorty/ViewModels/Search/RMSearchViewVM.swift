@@ -15,19 +15,19 @@ final class RMSearchViewVM {
     
     private var optionMapUpdateBlock: (((RMSearchInputViewVM.DynamicOption, String)) -> Void)?
     
-//    private var searchResultHandler: (() -> Void?)
+    private var searchResultHandler: (() -> Void?)
     
     //MARK: - Init
     
-    init(config: RMSearchViewController.Config){
+    init(config: RMSearchViewController.Config) {
         self.config = config
     }
     
     //MARK: - Public
     
-//    public func registerSearchResultHandler(_ block: @escaping () -> Void) {
-//        self.searchResultHandler = block
-//    }
+    public func registerSearchResultHandler(_ block: @escaping () -> Void) {
+        self.searchResultHandler = block
+    }
     
     public func executeSearch() {
         print("Search text: \(searchText)")
@@ -50,12 +50,13 @@ final class RMSearchViewVM {
             queryParameters: queryParams
         )
         
-        RMService.shared.execute(request, expecting: RMGetCharacterResponse.self) { result in
+        RMService.shared.execute(request, expecting: config.type.searchResultResponseType) { result in
             // Notify view of results, no results or error
             switch result {
             case .success(let model):
+                // Episodes, Characters: CollectionView,
                 print("Search results found: \(model.results.count)")
-            case .failure(let error):
+            case .failure:
                 break
             }
         }
