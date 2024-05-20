@@ -49,17 +49,23 @@ final class RMSearchViewVM {
             endpoint: config.type.endpoint,
             queryParameters: queryParams
         )
-        
-        RMService.shared.execute(request, expecting: config.type.searchResultResponseType) { result in
+    }
+    
+    private func makeSearchAPICall<T: Codable>(_ type: T.Type, request: RMRequest ) {
+        RMService.shared.execute(request, expecting: type) { result in
             // Notify view of results, no results or error
+            
             switch result {
             case .success(let model):
                 // Episodes, Characters: CollectionView,
-                print("Search results found: \(model.results.count)")
+                if let a = model as? RMGetCharacterResponse {
+                    print("Search results found: \(a.results.count)")
+                }
             case .failure:
                 break
             }
         }
+        
     }
     
     public func set(query text: String) {
