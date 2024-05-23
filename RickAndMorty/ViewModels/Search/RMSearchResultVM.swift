@@ -7,6 +7,13 @@
 
 import Foundation
 
-struct RMSearchResultVM {
+protocol RMSearchResultRepresentable {
+    associatedtype ResultType
     
+    var results: [ResultType] { get }
+}
+
+struct RMSearchResultVM<T>: RMSearchResultRepresentable {
+    typealias ResultType = T
+    var results: [ResultType]
 }

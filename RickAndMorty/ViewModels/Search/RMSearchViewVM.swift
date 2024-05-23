@@ -49,28 +49,50 @@ final class RMSearchViewVM {
             endpoint: config.type.endpoint,
             queryParameters: queryParams
         )
+        
+        switch config.type.endpoint {
+        case .character:
+            makeSearchAPICall(RMGetCharacterResponse.self, request: request)
+        case .location:
+            makeSearchAPICall(RMGetAllLocationsResponse.self, request: request)
+        case .episode:
+            makeSearchAPICall(RMGetAllEpisodesResponse.self, request: request)
+        }
     }
     
     private func makeSearchAPICall<T: Codable>(_ type: T.Type, request: RMRequest ) {
-        RMService.shared.execute(request, expecting: type) { result in
+        RMService.shared.execute(request, expecting: type) { [weak self] result in
             // Notify view of results, no results or error
             
             switch result {
             case .success(let model):
-                // Episodes, Characters: CollectionView,
-                if let a = model as? RMGetCharacterResponse {
-                    print("Search results found: \(a.results.count)")
-                }
+                self?.processSearchResults(model: model)
             case .failure:
                 break
             }
         }
-        
     }
+    
+    private func processSearchResults(model: Codable) {
+        if let characterResults    = model as? RMGetCharacterResponse {
+            print("Results: \(characterResults.results)")
+        }
+        else if let episodesResult = model as? RMGetAllEpisodesResponse {
+            print("Results: \(episodesResult.results)")
+        }
+        else if let locationResult = model as? RMGetAllLocationsResponse {
+            print("Results: \(locationResult.results)")
+        }
+        else {
+            // Error: No result view
+        }
+    }
+    
     
     public func set(query text: String) {
         self.searchText = text
     }
+    
     
     public func set(value: String, for option: RMSearchInputViewVM.DynamicOption) {
         optionMap[option] = value
