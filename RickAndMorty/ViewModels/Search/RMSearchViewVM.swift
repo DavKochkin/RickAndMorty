@@ -15,7 +15,7 @@ final class RMSearchViewVM {
     
     private var optionMapUpdateBlock: (((RMSearchInputViewVM.DynamicOption, String)) -> Void)?
     
-    private var searchResultHandler: (() -> Void?)
+    private var searchResultHandler: ((RMSearchResultVM) -> Void)?
     
     //MARK: - Init
     
@@ -25,7 +25,7 @@ final class RMSearchViewVM {
     
     //MARK: - Public
     
-    public func registerSearchResultHandler(_ block: @escaping () -> Void) {
+    public func registerSearchResultHandler(_ block: @escaping (RMSearchResultVM) -> Void) {
         self.searchResultHandler = block
     }
     
@@ -74,17 +74,35 @@ final class RMSearchViewVM {
     }
     
     private func processSearchResults(model: Codable) {
+        var resultsVM: RMSearchResultVM?
         if let characterResults    = model as? RMGetCharacterResponse {
-            print("Results: \(characterResults.results)")
+            resultsVM = .characters(characterResults.results.compactMap({
+                return RMCharacterCollectionViewCellVM(
+                    characterName: $0.name,
+                    characterStatus: $0.status,
+                    characterImageUrl: URL(string: $0.image)
+                )
+            })
+            )
         }
         else if let episodesResult = model as? RMGetAllEpisodesResponse {
-            print("Results: \(episodesResult.results)")
+            resultsVM = .episodes(episodesResult.results.compactMap({
+                return RMCharacterEpisodeCollectionViewCellVM(
+                    episodeDataUrl: URL(string: $0.url)
+                )
+            })
+            )
         }
         else if let locationResult = model as? RMGetAllLocationsResponse {
-            print("Results: \(locationResult.results)")
+            resultsVM = .locations(locationResult.results.compactMap({
+                return RMLocationTableViewCellVM(location: $0)
+            }))
         }
-        else {
-            // Error: No result view
+        
+        if let results = resultsVM {
+            self.searchResultHandler?(results)
+        } else {
+            // fallback error
         }
     }
     

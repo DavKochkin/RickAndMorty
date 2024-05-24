@@ -40,8 +40,8 @@ final class RMSearchView: UIView {
             self.searchInputView.update(option: tuple.0, value: tuple.1)
         }
         
-        viewModel.registerSearchResultHandler {
-            
+        viewModel.registerSearchResultHandler { results in
+            print(results)
         }
     }
     
