@@ -23,6 +23,7 @@ final class RMSearchView: UIView {
     private let searchInputView = RMSearchInputView()
     private let noResultsView   = RMNoSearchResultView()
     
+    
     //MARK: - Init
 
     init(frame: CGRect, viewModel: RMSearchViewVM) {
