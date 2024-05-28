@@ -16,13 +16,23 @@ final class RMSearchResultsView: UIView {
         }
     }
     
+    private let tableView: UITableView = {
+        let table = UITableView()
+        table.register(RMLocationTableViewCell.self,
+                       forCellReuseIdentifier: RMLocationTableViewCell.cellIdentifier)
+        table.isHidden = true
+        table.translatesAutoresizingMaskIntoConstraints = false
+        return table
+    }()
+    
     //MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         isHidden = true
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .red
+        addSubviews(tableView)
+        addConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -36,17 +46,32 @@ final class RMSearchResultsView: UIView {
         }
         switch viewModel {
         case .characters(let viewModels):
-            break
+            setupCollectionView()
         case .episodes(let viewModels):
-            break
+            setUpTableView()
         case .locations(let viewModels):
-            break
+            setupCollectionView()
         }
     }
     
     
-    private func addConstraints() {
+    private func setupCollectionView() {
         
+    }
+    
+    
+    private func setUpTableView() {
+        tableView.isHidden = false
+    }
+    
+    
+    private func addConstraints() {
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: topAnchor),
+            tableView.leftAnchor.constraint(equalTo: leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
     }
     
     
