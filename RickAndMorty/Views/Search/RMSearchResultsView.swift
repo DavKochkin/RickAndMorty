@@ -25,6 +25,8 @@ final class RMSearchResultsView: UIView {
         return table
     }()
     
+    private var locationCellViewModels: [RMLocationTableViewCellVM] = []
+    
     //MARK: - Init
 
     override init(frame: CGRect) {
@@ -48,7 +50,7 @@ final class RMSearchResultsView: UIView {
         case .characters(let viewModels):
             setupCollectionView()
         case .episodes(let viewModels):
-            setUpTableView()
+            setUpTableView(viewModels: viewModels)
         case .locations(let viewModels):
             setupCollectionView()
         }
@@ -60,8 +62,11 @@ final class RMSearchResultsView: UIView {
     }
     
     
-    private func setUpTableView() {
-        tableView.isHidden = false
+    private func setUpTableView(viewModels: [RMLocationTableViewCellVM]) {
+        tableView.dataSource = self
+        tableView.delegate   = self
+        tableView.isHidden   = false
+        self.locationCellViewModels = viewModels
     }
     
     
@@ -78,4 +83,26 @@ final class RMSearchResultsView: UIView {
     public func configure(with viewModel: RMSearchResultVM) {
         
     }
+}
+
+// MARK: - TableView
+
+extension RMSearchResultsView: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return locationCellViewModels.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RMLocationTableViewCell.cellIdentifier,
+                                                       for: indexPath) as? RMLocationTableViewCell else {
+            fatalError()
+        }
+        cell.configure(with: locationCellViewModels[indexPath.row])
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
 }
