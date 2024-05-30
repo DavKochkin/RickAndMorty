@@ -19,6 +19,8 @@ final class RMSearchViewVM {
     
     private var noResultsHandler: (() -> Void)?
     
+    private var searchResultModel: Codable?
+    
     //MARK: - Init
     
     init(config: RMSearchViewController.Config) {
@@ -36,7 +38,6 @@ final class RMSearchViewVM {
     }
     
     public func executeSearch() {
-        print("Search text: \(searchText)")
         
         // Build arguments
         var queryParams: [URLQueryItem] = [
@@ -107,6 +108,7 @@ final class RMSearchViewVM {
         }
         
         if let results = resultsVM {
+            self.searchResultModel = model
             self.searchResultHandler?(results)
         } else {
             // fallback error
@@ -135,5 +137,12 @@ final class RMSearchViewVM {
         _ block: @escaping ((RMSearchInputViewVM.DynamicOption, String)) -> Void
     ) {
         self.optionMapUpdateBlock = block
+    }
+    
+    public func locationSearchResult(at index: Int) -> RMLocation? {
+        guard let searchModel = searchResultModel as? RMGetAllLocationsResponse else {
+            return nil
+        }
+        return searchModel.results[index]
     }
 }
