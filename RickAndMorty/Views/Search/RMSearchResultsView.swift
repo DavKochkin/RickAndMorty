@@ -31,6 +31,23 @@ final class RMSearchResultsView: UIView {
         return table
     }()
     
+    private let collectionView: UICollectionView = {
+        let layout              = UICollectionViewFlowLayout()
+        layout.scrollDirection  = .vertical
+        layout.sectionInset     = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
+        let collectionView      = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.isHidden = true
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(RMCharacterCollectionViewCell.self,
+                                forCellWithReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier)
+        collectionView.register(RMCharacterCollectionViewCell.self,
+                                forCellWithReuseIdentifier: RMCharacterEpisodeCollectionViewCell.cellIdentifier)
+        collectionView.register(RMFooterLoadingCollectionReusableView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: RMFooterLoadingCollectionReusableView.identifier)
+        return collectionView
+    }()
+    
     private var locationCellViewModels: [RMLocationTableViewCellVM] = []
     
     //MARK: - Init
@@ -39,7 +56,7 @@ final class RMSearchResultsView: UIView {
         super.init(frame: frame)
         isHidden = true
         translatesAutoresizingMaskIntoConstraints = false
-        addSubviews(tableView)
+        addSubviews(tableView, collectionView)
         addConstraints()
     }
     
@@ -64,14 +81,20 @@ final class RMSearchResultsView: UIView {
     
     
     private func setupCollectionView() {
+        self.tableView.isHidden      = true
+        self.collectionView.isHidden = false
         
+        collectionView.backgroundColor = .red
+        
+        collectionView.reloadData()
     }
     
     
     private func setUpTableView(viewModels: [RMLocationTableViewCellVM]) {
-        tableView.dataSource = self
-        tableView.delegate   = self
-        tableView.isHidden   = false
+        tableView.dataSource    = self
+        tableView.delegate      = self
+        tableView.isHidden      = false
+        collectionView.isHidden = true
         self.locationCellViewModels = viewModels
     }
     
@@ -82,6 +105,11 @@ final class RMSearchResultsView: UIView {
             tableView.leftAnchor.constraint(equalTo: leftAnchor),
             tableView.rightAnchor.constraint(equalTo: rightAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
     
