@@ -88,8 +88,6 @@ final class RMSearchResultsView: UIView {
         self.tableView.isHidden      = true
         self.collectionView.isHidden = false
         
-        collectionView.backgroundColor = .red
-        
         collectionView.dataSource = self
         collectionView.delegate   = self
         
@@ -168,6 +166,7 @@ extension RMSearchResultsView: UICollectionViewDelegate, UICollectionViewDataSou
                 for: indexPath) as? RMCharacterCollectionViewCell else {
                 fatalError()
             }
+            cell.configure(with: characterVM)
             return cell
         }
         
@@ -190,7 +189,24 @@ extension RMSearchResultsView: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let currentViewModel = collectionViewCellViewModels[indexPath.row]
         
-        return .zero
+        let bounds = collectionView.bounds
+        
+        if currentViewModel is RMCharacterCollectionViewCell {
+            // Character size
+            let width = (bounds.width-30)/2
+            return CGSize(
+                width: width,
+                height: width * 1.5
+            )
+        }
+        
+        // Episode
+        let width = (bounds.width-30)/2
+        return CGSize(
+            width: width,
+            height: 100
+        )
     }
 }
