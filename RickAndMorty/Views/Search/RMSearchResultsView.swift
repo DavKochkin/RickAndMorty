@@ -35,6 +35,7 @@ final class RMSearchResultsView: UIView {
         let layout              = UICollectionViewFlowLayout()
         layout.scrollDirection  = .vertical
         layout.sectionInset     = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
+        
         let collectionView      = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isHidden = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -49,6 +50,7 @@ final class RMSearchResultsView: UIView {
     }()
     
     private var locationCellViewModels: [RMLocationTableViewCellVM] = []
+    private var collectionViewCellViewModels: [any Hashable] = []
     
     //MARK: - Init
 
@@ -71,10 +73,12 @@ final class RMSearchResultsView: UIView {
         }
         switch viewModel {
         case .characters(let viewModels):
+            self.collectionViewCellViewModels = viewModels
             setupCollectionView()
         case .locations(let viewModels):
             setUpTableView(viewModels: viewModels)
         case .episodes(let viewModels):
+            self.collectionViewCellViewModels = viewModels
             setupCollectionView()
         }
     }
@@ -85,6 +89,9 @@ final class RMSearchResultsView: UIView {
         self.collectionView.isHidden = false
         
         collectionView.backgroundColor = .red
+        
+        collectionView.dataSource = self
+        collectionView.delegate   = self
         
         collectionView.reloadData()
     }
@@ -141,4 +148,49 @@ extension RMSearchResultsView: UITableViewDelegate, UITableViewDataSource {
         delegate?.rmSearchResultView(self, didTapLocationAt: indexPath.row )
     }
     
+}
+
+
+// MARK: - CollectionView
+
+extension RMSearchResultsView: UICollectionViewDelegate, UICollectionViewDataSource,
+                               UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return collectionViewCellViewModels.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let currentViewModel = collectionViewCellViewModels[indexPath.row]
+        if let characterVM = currentViewModel as? RMCharacterCollectionViewCellVM {
+            // Character cell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier,
+                for: indexPath) as? RMCharacterCollectionViewCell else {
+                fatalError()
+            }
+            return cell
+        }
+        
+        // Episode
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: RMCharacterEpisodeCollectionViewCell.cellIdentifier,
+            for: indexPath) as? RMCharacterEpisodeCollectionViewCell else {
+            fatalError()
+        }
+        if let episodeVM = currentViewModel as? RMCharacterEpisodeCollectionViewCellVM {
+            cell.configure(with: episodeVM)
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        //handle  cell tap
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return .zero
+    }
 }
