@@ -38,9 +38,15 @@ final class RMLocationViewVM {
     
     public var isLoadingMoreLocations = false 
     
+    private var didFinishPagination:  (() -> Void)?
+    
     //MARK: - Init
     
     init() {}
+    
+    public func registerDidFinishPaginationBlock(_ block: @escaping () -> Void) {
+        self.didFinishPagination = block
+    }
     
     // Paginate if additional locations are needed
     public func fetchAdditionalLocations() {
@@ -67,24 +73,16 @@ final class RMLocationViewVM {
                 let moreResults    = responseModel.results
                 let info           = responseModel.info
                 print("more locations \(moreResults.count)")
-//                strongSelf.apiInfo = info
-//
-//                let originalCount  = strongSelf.episodes.count
-//                let newCount       = moreResults.count
-//                let total          = originalCount+newCount
-//                let startingIndex  = total - newCount
-//                let indexPathsToAdd: [IndexPath] = Array(startingIndex..<(startingIndex+newCount)).compactMap({
-//                    return IndexPath(row: $0, section: 0)
-//                })
-//                strongSelf.episodes.append(contentsOf: moreResults)
-//
-//                DispatchQueue.main.async {
-//                    strongSelf.delegate?.didLoadMoreEpisodes(
-//                        with: indexPathsToAdd
-//                    )
-//
-//                    strongSelf.isLoadingMoreEpisodes = false
-//                }
+                strongSelf.apiInfo = info
+                strongSelf.cellViewModels.append(contentsOf: moreResults.compactMap({
+                    return RMLocationTableViewCellVM(location: $0)
+                }))
+                DispatchQueue.main.async {
+                    strongSelf.isLoadingMoreLocations = false
+                    
+                    // Notify via callback 
+                    strongSelf.didFinishPagination?()
+                }
             case .failure(let failure):
                 print(String(describing: failure))
                 self?.isLoadingMoreLocations = false
