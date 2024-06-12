@@ -7,7 +7,11 @@
 
 import Foundation
 
-enum RMSearchResultVM {
+struct RMSearchResultViewModel {
+    let results: RMSearchResultType
+}
+
+enum RMSearchResultType {
     case characters([RMCharacterCollectionViewCellVM])
     case episodes([RMCharacterEpisodeCollectionViewCellVM])
     case locations([RMLocationTableViewCellVM])

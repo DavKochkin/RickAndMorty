@@ -14,7 +14,7 @@ final class RMSearchViewVM {
     
     private var optionMapUpdateBlock: (((RMSearchInputViewVM.DynamicOption, String)) -> Void)?
     
-    private var searchResultHandler: ((RMSearchResultVM) -> Void)?
+    private var searchResultHandler: ((RMSearchResultType) -> Void)?
     
     private var noResultsHandler: (() -> Void)?
     
@@ -28,7 +28,7 @@ final class RMSearchViewVM {
     
     // MARK: - Public
     
-    public func registerSearchResultHandler(_ block: @escaping (RMSearchResultVM) -> Void) {
+    public func registerSearchResultHandler(_ block: @escaping (RMSearchResultType) -> Void) {
         self.searchResultHandler = block
     }
     
@@ -83,7 +83,7 @@ final class RMSearchViewVM {
     }
     
     private func processSearchResults(model: Codable) {
-        var resultsVM: RMSearchResultVM?
+        var resultsVM: RMSearchResultType?
         var nextUrl: String?
         if let characterResults = model as? RMGetCharacterResponse {
             resultsVM = .characters(characterResults.results.compactMap({
