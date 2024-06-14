@@ -16,7 +16,7 @@ final class RMSearchResultsView: UIView {
     
     weak var delegate: RMSearchResultsViewDelegate?
     
-    private var viewModel: RMSearchResultType? {
+    private var viewModel: RMSearchResultViewModel? {
         didSet {
             self.processViewModel()
         }
@@ -49,7 +49,10 @@ final class RMSearchResultsView: UIView {
         return collectionView
     }()
     
+    /// TableView ViewModels
     private var locationCellViewModels: [RMLocationTableViewCellVM] = []
+    
+    ///  CollectionView ViewModels 
     private var collectionViewCellViewModels: [any Hashable] = []
     
     //MARK: - Init
@@ -71,7 +74,7 @@ final class RMSearchResultsView: UIView {
         guard let viewModel = viewModel else {
             return
         }
-        switch viewModel {
+        switch viewModel.results {
         case .characters(let viewModels):
             self.collectionViewCellViewModels = viewModels
             setupCollectionView()
@@ -119,7 +122,7 @@ final class RMSearchResultsView: UIView {
     }
     
     
-    public func configure(with viewModel: RMSearchResultType) {
+    public func configure(with viewModel: RMSearchResultViewModel) {
         self.viewModel = viewModel
     }
 }
@@ -174,7 +177,7 @@ extension RMSearchResultsView: UICollectionViewDelegate, UICollectionViewDataSou
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: RMCharacterEpisodeCollectionViewCell.cellIdentifier,
             for: indexPath) as? RMCharacterEpisodeCollectionViewCell else {
-            fatalError()
+             fatalError()
         }
         if let episodeVM = currentViewModel as? RMCharacterEpisodeCollectionViewCellVM {
             cell.configure(with: episodeVM)
@@ -214,32 +217,30 @@ extension RMSearchResultsView: UICollectionViewDelegate, UICollectionViewDataSou
 
 extension RMSearchResultsView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let viewModel = viewModel else {
+        guard let viewModel = viewModel,
+              !locationCellViewModels.isEmpty,
+              viewModel.shouldShowLoadMoreIndicator,
+              !viewModel.isLoadingMoreResults else {
             return
         }
-//              !viewModel.cellViewModels.isEmpty,
-//              viewModel.shouldShowLoadMoreIndicator,
-//              !viewModel.isLoadingMoreLocations else {
-//            return
-//        }
-//        
-//        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] t in
-//            let offset                = scrollView.contentOffset.y
-//            let totalContentHeight    = scrollView.contentSize.height
-//            let totalScrollViewHeight = scrollView.frame.size.height
-//            
-//            if offset >= (totalContentHeight - totalScrollViewHeight - 120) {
-//                DispatchQueue.main.async {
-//                    self?.showLoadingIndicator()
-//                }
-//                viewModel.fetchAdditionalLocations()
-//            }
-//            t.invalidate()
-//        }
-//    }
-//    
-//    private func showLoadingIndicator() {
-//        let footer = RMTableLoadingFooterView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 100))
-//        tableView.tableFooterView = footer
+
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] t in
+            let offset                = scrollView.contentOffset.y
+            let totalContentHeight    = scrollView.contentSize.height
+            let totalScrollViewHeight = scrollView.frame.size.height
+            
+            if offset >= (totalContentHeight - totalScrollViewHeight - 120) {
+                DispatchQueue.main.async {
+                    self?.showLoadingIndicator()
+                }
+                viewModel.fetchAdditionalLocations()
+            }
+            t.invalidate()
+        }
+    }
+    
+    private func showLoadingIndicator() {
+        let footer = RMTableLoadingFooterView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 100))
+        tableView.tableFooterView = footer
     }
 }

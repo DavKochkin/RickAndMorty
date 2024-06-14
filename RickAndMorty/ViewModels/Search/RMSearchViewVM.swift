@@ -14,7 +14,7 @@ final class RMSearchViewVM {
     
     private var optionMapUpdateBlock: (((RMSearchInputViewVM.DynamicOption, String)) -> Void)?
     
-    private var searchResultHandler: ((RMSearchResultType) -> Void)?
+    private var searchResultHandler: ((RMSearchResultViewModel) -> Void)?
     
     private var noResultsHandler: (() -> Void)?
     
@@ -28,7 +28,7 @@ final class RMSearchViewVM {
     
     // MARK: - Public
     
-    public func registerSearchResultHandler(_ block: @escaping (RMSearchResultType) -> Void) {
+    public func registerSearchResultHandler(_ block: @escaping (RMSearchResultViewModel) -> Void) {
         self.searchResultHandler = block
     }
     
@@ -112,7 +112,8 @@ final class RMSearchViewVM {
         
         if let results = resultsVM {
             self.searchResultModel = model
-            self.searchResultHandler?(results)
+            let vm = RMSearchResultViewModel(results: results, next: nextUrl)
+            self.searchResultHandler?(vm)
         } else {
             // fallback error
             handleNoResults()

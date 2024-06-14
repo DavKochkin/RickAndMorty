@@ -53,12 +53,13 @@ final class RMLocationViewVM {
         guard !isLoadingMoreLocations else {
             return
         }
-        isLoadingMoreLocations = true
         
         guard let nextUrlString = apiInfo?.next,
               let url = URL(string: nextUrlString) else {
             return
         }
+        
+        isLoadingMoreLocations = true
         
         guard let request = RMRequest(url: url) else {
             isLoadingMoreLocations = false
