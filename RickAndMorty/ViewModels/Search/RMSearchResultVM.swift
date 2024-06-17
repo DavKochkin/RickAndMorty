@@ -8,7 +8,7 @@
 import Foundation
 
 final class RMSearchResultViewModel {
-    let results: RMSearchResultType
+    public private(set) var results: RMSearchResultType
     private var next: String?
     
     init(results: RMSearchResultType, next: String?, isLoadingMoreResults: Bool = false) {
@@ -23,7 +23,7 @@ final class RMSearchResultViewModel {
         return next != nil 
     }
     
-    public func fetchAdditionalLocations() {
+    public func fetchAdditionalLocations(completion: @escaping ([RMLocationTableViewCellVM]) -> Void)  {
         guard !isLoadingMoreResults else {
             return
         }
@@ -47,16 +47,28 @@ final class RMSearchResultViewModel {
             case .success(let responseModel):
                 let moreResults    = responseModel.results
                 let info           = responseModel.info
-                print("more locations \(moreResults.count)")
                 strongSelf.next = info.next // Capture new pagination url
-//                strongSelf.cellViewModels.append(contentsOf: moreResults.compactMap({
-//                    return RMLocationTableViewCellVM(location: $0)
-//                }))
+                
+                let additionalLocations = moreResults.compactMap({
+                    return RMLocationTableViewCellVM(location: $0)
+                })
+                
+                var newResults: [RMLocationTableViewCellVM] = []
+                
+                switch strongSelf.results {
+                case .locations(let existingResults):
+                    newResults = existingResults + additionalLocations
+                    strongSelf.results = .locations(newResults)
+                    break
+                case .characters, .episodes:
+                    break
+                }
+                
                 DispatchQueue.main.async {
                     strongSelf.isLoadingMoreResults = false
                     
                     // Notify via callback
-//                    strongSelf.didFinishPagination?()
+                    completion(newResults)
                 }
             case .failure(let failure):
                 print(String(describing: failure))

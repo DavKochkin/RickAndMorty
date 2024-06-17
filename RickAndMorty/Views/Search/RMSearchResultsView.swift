@@ -214,9 +214,23 @@ extension RMSearchResultsView: UICollectionViewDelegate, UICollectionViewDataSou
     }
 }
 
+//MARK: - ScrollViewDelegate
 
 extension RMSearchResultsView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if !locationCellViewModels.isEmpty {
+            handleLocationpagination(scrollView: scrollView)
+        } else {
+            // Collaction View
+            handleCharacterOrEpisodePagination(scrollView: scrollView)
+        }
+    }
+    
+    private func handleCharacterOrEpisodePagination(scrollView: UIScrollView) {
+        
+    }
+    
+    private func handleLocationpagination(scrollView: UIScrollView) {
         guard let viewModel = viewModel,
               !locationCellViewModels.isEmpty,
               viewModel.shouldShowLoadMoreIndicator,
@@ -233,7 +247,12 @@ extension RMSearchResultsView: UIScrollViewDelegate {
                 DispatchQueue.main.async {
                     self?.showLoadingIndicator()
                 }
-                viewModel.fetchAdditionalLocations()
+                viewModel.fetchAdditionalLocations { [weak self] newResults in
+                    // Refresh table
+                    self?.tableView.tableFooterView =  nil
+                    self?.locationCellViewModels = newResults
+                    self?.tableView.reloadData()
+                }
             }
             t.invalidate()
         }
