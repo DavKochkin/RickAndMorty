@@ -255,7 +255,28 @@ extension RMSearchResultsView: UIScrollViewDelegate {
     }
     
     private func handleCharacterOrEpisodePagination(scrollView: UIScrollView) {
-        
+        guard let viewModel = viewModel,
+              !collectionViewCellViewModels.isEmpty,
+              viewModel.shouldShowLoadMoreIndicator,
+              !viewModel.isLoadingMoreResults else {
+            return
+        }
+
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] t in
+            let offset                = scrollView.contentOffset.y
+            let totalContentHeight    = scrollView.contentSize.height
+            let totalScrollViewHeight = scrollView.frame.size.height
+            
+            if offset >= (totalContentHeight - totalScrollViewHeight - 120) {
+                viewModel.fetchAdditionalResults { [weak self] newResults in
+                    self?.tableView.tableFooterView    = nil
+                    self?.collectionViewCellViewModels = newResults
+                    
+                    print("Should add more result cells for search results")
+                }
+            }
+            t.invalidate()
+        }
     }
     
     private func handleLocationpagination(scrollView: UIScrollView) {
@@ -273,7 +294,7 @@ extension RMSearchResultsView: UIScrollViewDelegate {
             
             if offset >= (totalContentHeight - totalScrollViewHeight - 120) {
                 DispatchQueue.main.async {
-                    self?.showLoadingIndicator()
+                    self?.showTableLoadingIndicator()
                 }
                 viewModel.fetchAdditionalLocations { [weak self] newResults in
                     // Refresh table
@@ -286,7 +307,7 @@ extension RMSearchResultsView: UIScrollViewDelegate {
         }
     }
     
-    private func showLoadingIndicator() {
+    private func showTableLoadingIndicator() {
         let footer = RMTableLoadingFooterView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: 100))
         tableView.tableFooterView = footer
     }
