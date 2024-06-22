@@ -261,7 +261,7 @@ extension RMSearchResultsView: UIScrollViewDelegate {
               !viewModel.isLoadingMoreResults else {
             return
         }
-
+        
         Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] t in
             let offset                = scrollView.contentOffset.y
             let totalContentHeight    = scrollView.contentSize.height
@@ -269,10 +269,25 @@ extension RMSearchResultsView: UIScrollViewDelegate {
             
             if offset >= (totalContentHeight - totalScrollViewHeight - 120) {
                 viewModel.fetchAdditionalResults { [weak self] newResults in
-                    self?.tableView.tableFooterView    = nil
-                    self?.collectionViewCellViewModels = newResults
+                    guard let strongSelf = self else {
+                        return
+                    }
                     
-                    print("Should add more result cells for search results")
+                    DispatchQueue.main.async {
+                        strongSelf.tableView.tableFooterView    = nil
+                        
+                        let originalCount = strongSelf.collectionViewCellViewModels.count
+                        let newCount      = (newResults.count - originalCount)
+                        let total         = originalCount + newCount
+                        let startingIndex = total - newCount
+                        let indexPathsToAdd: [IndexPath] = Array(startingIndex..<(startingIndex+newCount)).compactMap({
+                            return IndexPath(row: $0, section: 0)
+                        })
+                        print("Should add more result cells for search results \(newResults.count)")
+                        
+                        strongSelf.collectionView.insertItems(at: indexPathsToAdd)
+                        strongSelf.collectionViewCellViewModels = newResults
+                    }
                 }
             }
             t.invalidate()
